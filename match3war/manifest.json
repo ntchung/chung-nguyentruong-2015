@@ -1,0 +1,17 @@
+{
+  "appID": "6209985f18d94cbf87b2e66b56181e0e",
+  "dependencies": {
+    "devkit-core": "https://github.com/gameclosure/devkit-core#v3.0.2"
+  },
+  "shortName": "match3war",
+  "studio": {
+    "domain": "studio.example.com",
+    "name": "Your Studio Name",
+    "stagingDomain": "staging.example.com"
+  },
+  "supportedOrientations": [
+    "portrait",
+    "landscape"
+  ],
+  "title": "match3war"
+}
