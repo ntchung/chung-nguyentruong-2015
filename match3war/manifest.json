@@ -10,8 +10,7 @@
     "stagingDomain": "staging.example.com"
   },
   "supportedOrientations": [
-    "portrait",
-    "landscape"
+    "portrait"
   ],
-  "title": "match3war"
+  "title": "War gems"
 }
