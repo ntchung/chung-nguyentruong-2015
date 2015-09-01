@@ -3,6 +3,7 @@ import ui.StackView as StackView;
 import ui.TextView as TextView;
 
 import src.TitleScreen as TitleScreen;
+import src.LevelSelectScreen as LevelSelectScreen;
 
 exports = Class(GC.Application, function () {
 
@@ -25,8 +26,14 @@ exports = Class(GC.Application, function () {
       GLOBAL.viewWidth = rootView.style.width;
       GLOBAL.viewHeight = rootView.style.height;
       
-      var titleScreen = new TitleScreen();
+      var levelSelectScreen = new LevelSelectScreen();
+      var titleScreen = new TitleScreen();      
       rootView.push(titleScreen);      
+      
+      titleScreen.on('titlescreen:start', function () {          
+          rootView.push(levelSelectScreen);
+          gamescreen.emit('app:start');
+      });
   };
 
   this.launchUI = function () {
