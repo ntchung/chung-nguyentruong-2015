@@ -4,6 +4,7 @@ import ui.TextView as TextView;
 
 import src.TitleScreen as TitleScreen;
 import src.LevelSelectScreen as LevelSelectScreen;
+import src.GameScreen as GameScreen;
 
 exports = Class(GC.Application, function () {
 
@@ -20,7 +21,7 @@ exports = Class(GC.Application, function () {
           width: 480,
           height: device.screen.height / scaleRatio,
           clip: true,
-          scale: scaleRatio
+          scale: scaleRatio,
       });
 
       GLOBAL.viewWidth = rootView.style.width;
@@ -28,12 +29,19 @@ exports = Class(GC.Application, function () {
       
       var levelSelectScreen = new LevelSelectScreen();
       var titleScreen = new TitleScreen();      
-      rootView.push(titleScreen);      
+      var gameScreen = new GameScreen();      
       
-      titleScreen.on('titlescreen:start', function () {          
+      rootView.push(gameScreen);
+      
+      //rootView.push(titleScreen);      
+      
+      /*titleScreen.on('titlescreen:start', function () {          
           rootView.push(levelSelectScreen);
-          gamescreen.emit('app:start');
       });
+      
+      levelSelectScreen.on('levelselectscreen:go', function() {
+          rootView.push(gameScreen);
+      });*/
   };
 
   this.launchUI = function () {

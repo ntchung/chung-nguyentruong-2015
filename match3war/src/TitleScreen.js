@@ -5,13 +5,12 @@ import ui.ImageView;
 import ui.resource.loader as loader;
 
 import ui.widget.ButtonView as ButtonView;
+import src.common.utils as utils;
 
 exports = Class(ui.ImageScaleView, function(supr) {
     
     this.init = function(opts)
     {
-        var view = this;
-        
         opts = merge(opts, {
             scaleMethod: 'cover',
             x: 0,
@@ -21,24 +20,24 @@ exports = Class(ui.ImageScaleView, function(supr) {
         
         supr(this, 'init', [opts]);                
         
-        this.doOnLoad(function() {
-            var loadingView = showLoadingAnimation(view);            
-            setTimeout(function() {
-            loader.preload(['resources/images'], function() {
+        var view = this;
+        
+        var loadingView = this.showLoadingAnimation();            
+        setTimeout(function() {
+            loader.preload(['resources/images/ui', 'resources/images', 'resources/images/blocks'], function() {
                 loadingView.hide();
-                initAfterPreload(view); 
+                view.build();
             }); 
-            }, 100);
-        });
+        }, 1);
     };       
     
-    function showLoadingAnimation(view)
+    this.showLoadingAnimation = function()
     {
         var screenWidth = GLOBAL.viewWidth;
         var screenHeight = GLOBAL.viewHeight;
         
         return new LoadingSheet({
-            superview: view,
+            superview: this,
             x: (screenWidth / 2 - 64),
             y: (screenHeight / 2 - 64),
             width: 128,
@@ -46,14 +45,26 @@ exports = Class(ui.ImageScaleView, function(supr) {
         });
     }
     
-    function initAfterPreload(view)
-    {
+    this.build = function() {
         var screenWidth = GLOBAL.viewWidth;
         var screenHeight = GLOBAL.viewHeight;
                 
+        var text = new TextView({
+            superview: this,
+            x: (screenWidth / 2) - 200,
+            y: 40,            
+            width: 400,
+            height: 100,
+            text: "Gems of War",
+            size: 80,
+            color: "white",
+            shadowColor: '#111111',
+            shadowWidth: 4
+        });
+        
         // Show buttons
         var startButton = new ButtonView({
-            superview: view,
+            superview: this,
             x: 120,
             y: (screenHeight - 120),
             width: 240,
@@ -84,29 +95,23 @@ var LoadingSheet = Class(ui.ImageView, function(supr) {
     
     this.init = function(opts) {
         opts = merge(opts, {
-            image: "resources/images/ui/coin_animation.png"
+            image: "resources/images/ui/time_icon_0001.png"
         });
         
         supr(this, "init", [opts]);
         
-        var map = this.getImage().getMap();        
-        this._offsetX = map.x;
-        this._sizeX = 40.0; 
-        this._index = 0;
-        this._dt = 50;
+        this._dt = 0;
+        this._index = 0;        
     }
     
-    this.tick = function(dt) {
+    this.tick = function(dt) {        
         this._dt += dt;
-        if (this._dt > 100) 
+        if (this._dt > 50) 
         {
-            this._dt %= 100;
+            this._dt %= 50;
             
-            this._index = (this._index + 1) % 10;
-            
-            var map = this.getImage().getMap();        
-            map.width = this._sizeX;
-            map.x = this._offsetX + ((this._index % 10.0) | 0) * this._sizeX;
+            this._index = (this._index + 1) % 14;
+            this.setImage("resources/images/ui/time_icon_" + utils.zeroFill(4, this._index + 1, '0') +".png");            
         }
     }
 });
