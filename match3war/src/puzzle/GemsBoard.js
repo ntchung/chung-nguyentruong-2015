@@ -19,9 +19,12 @@ exports = Class(ui.View, function(supr) {
         GLOBAL.gemWidth = constants.BOARD_WIDTH / opts.rows;
         GLOBAL.gemHeight = constants.BOARD_HEIGHT / opts.cols;
         
-        this._gems = [];        
+        this._rows = opts.rows;
+        this._cols = opts.cols;
+        this._gems = new Array(opts.rows);                
         for (var row = 0; row < opts.rows; ++row)
         {
+            this._gems[row] = new Array(opts.cols);
             for (var col = 0; col < opts.cols; ++col)
             {
                 var rndType = Math.floor(Math.min(Math.random() * 5, 4)) + 1;
@@ -32,56 +35,38 @@ exports = Class(ui.View, function(supr) {
                     type: rndType,
                 });
                                 
-                this._gems.push(gem);
+                this._gems[row][col] = gem;
             }
-        }     
+        }    
         
-        var gview = new GestureView({
-			superview: this,
-			x: 0,
-            y: 0,
-            width: constants.BOARD_WIDTH,
-            height: constants.BOARD_HEIGHT,
-			backgroundColor: 'blue', 
-            opacity: 0,
-		});
+        this._selectedGem = null;
         
-        gview.on('Swipe', bind(this, 'swipe'));
-		gview.on('Pinch', bind(this, 'pinch'));
-		gview.on('Rotate', bind(this, 'rotate'));
-		gview.on('DragSingle', bind(this, 'drag'));
-		gview.on('FingerDown', bind(this, 'fingerDown'));
-		gview.on('FingerUp', bind(this, 'fingerUp'));
-		gview.on('ClearMulti', bind(this, 'clearMulti'));
-    };  
-    
-    this.swipe = function (angle, dir, numberOfFingers) {
-		console.log(angle + " " + dir + " " + numberOfFingers);
-	};
-
-	this.pinch = function (d) {
-		console.log("Pinch");
-	};
-
-	this.rotate = function (r) {
-		console.log("rotate");
-	};
-
-	this.drag = function(dx, dy) {
-		console.log("Drag");
-	};
-
-	this.fingerDown = function(fingerCount) {
-		console.log('FingerDown. New count: ' + fingerCount);
-	};
-
-	this.fingerUp = function(fingerCount) {
-		console.log('FingerUp. New count: ' + fingerCount);
-	};
-
-	this.clearMulti = function() {
-		console.log("Clear");
-	};
+        this.on('InputStart', function (event, point) {
+            // Find pointed gem
+            var row = Math.floor(point.y / GLOBAL.gemHeight);
+            if (row >= 0 && row < this._rows)
+            {
+                var col = Math.floor(point.x / GLOBAL.gemWidth);
+                if (col >= 0 && col < this._cols)
+                {
+                    this._selectedGem = this._gems[row][col];
+                    this._selectedGem.animateSelection();
+                }
+            }
+        });
+        
+        this.on('InputMove', function (event, point) {
+            console.log("Moved: " + point.x + "," + point.y);
+        });
+        
+        this.on('InputOut', function (event, point) {
+            if (this._selectedGem)
+            {
+                this._selectedGem.animateUnselection();
+            }
+            this._selectedGem = null;
+        });
+    };     
     
     this.render = function(ctx) {
         // Let it empty.
