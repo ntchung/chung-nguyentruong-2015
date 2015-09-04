@@ -3,6 +3,7 @@ import ui.ViewPool as ViewPool;
 import math.geom.Vec2D as Vec2D;
 
 import src.puzzle.Gem as Gem; 
+import src.puzzle.GemsBoardEffects as GemsBoardEffects;
 import src.common.constants as constants;
 
 BoardState = {
@@ -19,20 +20,13 @@ exports = Class(ui.View, function(supr) {
             height: 455,            
             rows: 10,
             cols: 10,
-        });
-        
+        });        
                 
         supr(this, 'init', [opts]);    
                 
+        // Gems
         GLOBAL.gemWidth = constants.BOARD_WIDTH / opts.rows;
-        GLOBAL.gemHeight = constants.BOARD_HEIGHT / opts.cols;
-        
-        this._interractionLock = 500;
-        this._intentSwapFromGem = null;
-        this._intentSwapToGem = null;
-        
-        this._checkForMatchesTargets = null;
-        this._state = BoardState.Explode;
+        GLOBAL.gemHeight = constants.BOARD_HEIGHT / opts.cols;        
         
         this._gemsPool = new ViewPool({
             ctor: Gem,
@@ -56,9 +50,20 @@ exports = Class(ui.View, function(supr) {
                 this.fillGemAt(row, col);
             }
         }    
-                
+        
+        // Effects
+        this._effects = new GemsBoardEffects(this);
+             
+        // Inputs handling
         this._selectedGem = null;
         this._touchBeginPoint = null;
+        
+        this._interractionLock = 500;
+        this._intentSwapFromGem = null;
+        this._intentSwapToGem = null;
+        
+        this._checkForMatchesTargets = null;
+        this._state = BoardState.Explode;
         
         this.on('InputStart', function (event, point) {
             // Find pointed gem
@@ -273,12 +278,12 @@ exports = Class(ui.View, function(supr) {
                     }
                 }
                 
-                if (checkCount > 0)
+                if (checkCount > 0 || this._checkForMatchesTargets)
                 {                       
                     this._checkForMatchesTargets = null;
                     this._state = BoardState.Explode;     
                     
-                    this._interractionLock = 300;
+                    this._interractionLock = 300;                    
                 }                
                 else
                 {
@@ -286,7 +291,7 @@ exports = Class(ui.View, function(supr) {
                 }
             }
             else if (this._state == BoardState.Explode)
-            {
+            {                
                 var checkCount = 0;
                 
                 if (this._checkForMatchesTargets)
@@ -295,24 +300,22 @@ exports = Class(ui.View, function(supr) {
                     this._checkForMatchesTargets.forEach(function(element, index, array) {
                         checkCount += view.explodeMatches(element); 
                     });
-                }
-                else
-                {
-                    for (var row = 0; row < this._rows; ++row)
-                    {
-                        for (var col = 0; col < this._cols; ++col)
-                        {
-                            var gem = this._gems[row][col];
-                            checkCount += this.explodeMatches(gem);                        
-                        }
-                    }
+                    
+                    this._checkForMatchesTargets = null;
                 }
                 
-                this._checkForMatchesTargets = null;
+                for (var row = 0; row < this._rows; ++row)
+                {
+                    for (var col = 0; col < this._cols; ++col)
+                    {
+                        var gem = this._gems[row][col];
+                        checkCount += this.explodeMatches(gem);                        
+                    }
+                }                
                 
                 if (checkCount > 0)
                 {
-                    this._state = BoardState.Collapse;
+                    this._state = BoardState.Collapse;                                    
                 }
                 else
                 {                    
@@ -320,30 +323,23 @@ exports = Class(ui.View, function(supr) {
                 }
                 
                 this._interractionLock = 100;
-            }            
+            }
             
             var swapFromGem = this._intentSwapFromGem;
             var swapToGem = this._intentSwapToGem;
             this._intentSwapFromGem = null;
             this._intentSwapToGem = null;                
-            
+
             if (swapFromGem && swapToGem)
             {
                 this.swapGems(swapFromGem, swapToGem);                
-                
-                this._checkForMatchesTargets = [swapFromGem, swapToGem];
-                this._state = BoardState.Explode;                
+
+                this._checkForMatchesTargets = [swapFromGem, swapToGem];                                
+                if (this._state == BoardState.Idle)
+                {
+                    this._state = BoardState.Explode;
+                }
             }
-        }
-    }
-    
-    this.removeGemAt = function(row, col)
-    {
-        var gem = this.getGemAt(row, col);
-        if (gem)
-        {
-            this._gems[row][col] = null;
-            this._gemsPool.releaseView(gem);
         }
     }
     
@@ -351,8 +347,10 @@ exports = Class(ui.View, function(supr) {
     {
         if (gem)
         {
+            this._effects.createGemExplosion(gem._type, gem.style.x, gem.style.y);
+            
             this._gems[gem._row][gem._col] = null;
-            this._gemsPool.releaseView(gem);
+            this._gemsPool.releaseView(gem);            
         }
     }
     
@@ -405,11 +403,24 @@ exports = Class(ui.View, function(supr) {
                 this._gems[row][col] = null;
                 this._gems[fallToRow][col] = gem;
                 
+                this.removeIntentGemSwap(gem);
                 return 1;
             }
         }
         
         return 0;
+    }
+    
+    this.removeIntentGemSwap = function(gem)
+    {
+        if (this._intentSwapFromGem == gem)
+        {
+            this._intentSwapFromGem = null;
+        }
+        else if (this._intentSwapToGem == gem)
+        {
+            this._intentSwapToGem = null;
+        }
     }
     
     this.explodeMatches = function(fromGem)
@@ -451,6 +462,7 @@ exports = Class(ui.View, function(supr) {
                 var view = this;
                 verticalMatches.forEach(function(element, index, array) {
                     view.removeGem(element);
+                    view.removeIntentGemSwap(element);
                 });
                 
                 exploded = true;
@@ -487,6 +499,7 @@ exports = Class(ui.View, function(supr) {
                 var view = this;
                 horizontalMatches.forEach(function(element, index, array) {
                     view.removeGem(element);
+                    view.removeIntentGemSwap(element);
                 });
                 
                 exploded = true;

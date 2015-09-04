@@ -1,10 +1,11 @@
 import ui.View;
 import ui.ImageView;
+import ui.ViewPool as ViewPool;
 import animate;
 import math.geom.Point as Point;
 
 import src.common.utils as utils;
-import src.common.constants as constants;
+import src.common.constants as constants;        
 
 exports = Class(ui.View, function(supr) {
    
@@ -134,4 +135,3 @@ function animateGemUnselection()
     // Ending the rotation
     animate(this._gemSprite).clear().now({r: Math.PI * 2}, 500 * (Math.PI * 2 - this.style.r) / (Math.PI * 2), animate.easeOut).then({r: 0.0}, 0, animate.linear).then({zIndex: 0.0});   
 }
-
