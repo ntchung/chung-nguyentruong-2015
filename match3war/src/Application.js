@@ -31,17 +31,22 @@ exports = Class(GC.Application, function () {
       var titleScreen = new TitleScreen();      
       var gameScreen = new GameScreen();      
       
-      rootView.push(gameScreen);
-      
       //rootView.push(titleScreen);      
+      rootView.push(gameScreen);    
+      gameScreen.emit('app:newgame');
       
-      /*titleScreen.on('titlescreen:start', function () {          
+      titleScreen.on('titlescreen:start', function () {                  
           rootView.push(levelSelectScreen);
       });
       
       levelSelectScreen.on('levelselectscreen:go', function() {
           rootView.push(gameScreen);
-      });*/
+          gameScreen.emit('app:newgame');
+      });
+      
+      gameScreen.on('gamescreen:mainmenu', function() {
+          rootView.pop();
+      });
   };
 
   this.launchUI = function () {

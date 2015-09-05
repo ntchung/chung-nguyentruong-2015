@@ -62,6 +62,8 @@ exports = Class(ui.ImageScaleView, function(supr) {
             shadowWidth: 4
         });
         
+        var view = this;
+        
         // Show buttons
         var startButton = new ButtonView({
             superview: this,
@@ -81,7 +83,7 @@ exports = Class(ui.ImageScaleView, function(supr) {
             },
             title: "Start game",
             on: {
-                up: function() {
+                up: function() {                    
                     view.emit('titlescreen:start');
                 }
             }

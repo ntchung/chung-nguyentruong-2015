@@ -24,23 +24,48 @@ exports = Class(ui.View, function(supr) {
     
     this.onObtain = function(opts)
     {        
+        animate(this).clear();
+        
         this._type = opts.type;
+        this._colorCode = this.getColorCode();
         this._row = opts.row;
         this._col = opts.col;    
         
-        this._gemSprite.setImage(this.getImageUrl());
-        
-        var originalPosition = this.getOriginalPosition();        
-        this.style.x = originalPosition.x;
-        this.style.y = originalPosition.y - constants.BOARD_HEIGHT * 1.25;        
+        this._gemSprite.setImage(this.getImageUrl());        
         this.style.visible = true;
-        
-        this.gravityFall();
+                
+        var originalPosition = this.getOriginalPosition();                        
+        if (opts.appearance == constants.FLIP_OUT)
+        {
+            this.style.x = originalPosition.x;
+            this.style.y = originalPosition.y;        
+            this.flipOut();
+        }
+        else
+        {
+            this.style.x = originalPosition.x;
+            this.style.y = originalPosition.y - constants.BOARD_HEIGHT * 1.25;        
+            this.gravityFall();
+        }
+    }
+    
+    this.getColorCode = function()
+    {
+        return (this._type < constants.GEM_TYPE_MAGIC) ? (1 << this._type) : 0xFFFF;
+    }
+    
+    this.flipOut = function()
+    {
+        var originalPosition = this.getOriginalPosition();                
+                
+        animate(this._gemSprite).clear().now({scale: 0, r: 0}, 0)
+            .then({scale: 1}, 200, animate.easeOut);
     }
     
     this.gravityFall = function()
     {
-        var originalPosition = this.getOriginalPosition();        
+        var originalPosition = this.getOriginalPosition();                        
+        
         animate(this).clear().now({x: originalPosition.x, y: originalPosition.y + 5}, 300, animate.easeIn)
             .then({x: originalPosition.x, y: originalPosition.y - 10}, 100, animate.easeOut)
             .then({x: originalPosition.x, y: originalPosition.y}, 100, animate.easeIn);
@@ -48,13 +73,12 @@ exports = Class(ui.View, function(supr) {
     
     this.getImageUrl = function()
     {
-        return "resources/images/blocks/icon_block_" + utils.zeroFill(2, this._type, '0') + ".png";
+        return (this._type < constants.GEM_TYPE_MAGIC) ? "resources/images/blocks/icon_block_" + utils.zeroFill(2, this._type, '0') + ".png"
+            : "resources/images/blocks/icon_block_clear.png";
     }
     
     this.animateSelection = function()
     {
-        this.reposition();
-        
         if (this._gemSprite)
         {
             animateGemSelection.call(this);            
@@ -67,12 +91,6 @@ exports = Class(ui.View, function(supr) {
         {
             animateGemUnselection.call(this);
         }
-    }
-    
-    this.reposition = function()
-    {
-        this.style.x = this._col * GLOBAL.gemWidth;
-        this.style.y = this._row * GLOBAL.gemHeight;
     }
     
     this.feintSwap = function(otherGem)
@@ -114,7 +132,13 @@ exports = Class(ui.View, function(supr) {
     
     this.isMatched = function(otherGem)
     {
-        return otherGem != null && this._type == otherGem._type;
+        // If a gem is "color-neutral", it will match with any other colors.
+        return ((this._colorCode & otherGem._colorCode) != 0);
+    }    
+    
+    this.isColorNeutral = function()
+    {
+        return this._colorCode == 0xFFFF;
     }
     
     // Empty

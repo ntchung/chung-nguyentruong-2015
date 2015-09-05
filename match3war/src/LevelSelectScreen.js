@@ -16,13 +16,13 @@ exports = Class(ui.ImageScaleView, function(supr) {
             image: "resources/images/title_screen.jpg"
         });
         
-        supr(this, 'init', [opts]);        
+        supr(this, 'init', [opts]);                
         
         var view = this;
         
         // Show buttons
         var startButton = new ButtonView({
-            superview: view,
+            superview: this,
             x: 120,
             y: (screenHeight - 120),
             width: 240,
