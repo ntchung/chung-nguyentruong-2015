@@ -8,6 +8,7 @@ exports.TOUCH_MOVE_THRESHOLD_FOR_SWAP_GEM = 25;
 exports.HINT_POTENTIAL_MATCH_TIME = 2000;
 
 exports.GEM_TYPE_MAGIC = 6;
+exports.GEM_TYPE_COUNT = 7;
 
 exports.GRAVITY_FALL = 0;
 exports.FLIP_OUT = 1;

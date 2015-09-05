@@ -21,7 +21,9 @@ exports = Class(ui.View, function(supr) {
             height: 455,                        
         });        
                 
-        supr(this, 'init', [opts]);    
+        supr(this, 'init', [opts]);  
+        
+        this._player = opts.player;
                 
         // Gems        
         this._gemsPool = new ViewPool({
@@ -684,8 +686,9 @@ exports = Class(ui.View, function(supr) {
         {
             var view = this;
             verticalMatches.forEach(function(element, index, array) {
+                view._player.collectGems(element._type, 1);
                 view.removeGem(element);
-                view.removeIntentGemSwap(element);
+                view.removeIntentGemSwap(element);                                
             });
 
             exploded = true;
@@ -792,8 +795,9 @@ exports = Class(ui.View, function(supr) {
         {
             var view = this;
             horizontalMatches.forEach(function(element, index, array) {
+                view._player.collectGems(element._type, 1);
                 view.removeGem(element);
-                view.removeIntentGemSwap(element);
+                view.removeIntentGemSwap(element);                
             });
 
             exploded = true;
@@ -804,7 +808,9 @@ exports = Class(ui.View, function(supr) {
             this.removeGem(fromGem);
             view.removeIntentGemSwap(fromGem);
             
-            return verticalMatches.length + horizontalMatches.length;
+            var count = 1 + verticalMatches.length + horizontalMatches.length;
+            this._player.addMana(count);
+            return count;
         }
         
         return 0;
@@ -818,11 +824,17 @@ exports = Class(ui.View, function(supr) {
 
         // Vertical check
         var verticalMatches = [];
+        var verticalHasMagic = false;
         for (var i = row + 1; i < this._rows; ++i)
         {
             var gem = this._gems[i][col];
             if (gem && fromGem.isMatched(gem))
             {
+                if (gem.isColorNeutral())
+                {
+                    verticalHasMagic = true;
+                }
+                
                 verticalMatches.push(gem);                
             }
             else
@@ -850,16 +862,25 @@ exports = Class(ui.View, function(supr) {
                 view.removeIntentGemSwap(element);
             });
 
+            if (verticalHasMagic)
+            {
+                this._player.addMana(verticalMatches.length);
+            }
             exploded = true;
         }
 
         // Horizontal check
         var horizontalMatches = [];
+        var horizontalHasMagic = false;
         for (var i = col + 1; i < this._cols; ++i)
         {
             var gem = this._gems[row][i];
             if (gem && fromGem.isMatched(gem))
             {
+                if (gem.isColorNeutral())
+                {
+                    horizontalHasMagic = true;
+                }
                 horizontalMatches.push(gem);
             }
             else
@@ -887,14 +908,27 @@ exports = Class(ui.View, function(supr) {
                 view.removeIntentGemSwap(element);
             });
 
+            if (horizontalHasMagic)
+            {
+                this._player.addMana(horizontalMatches.length);
+            }
             exploded = true;
         }
 
         if (exploded)
         {
+            var count = 1 + verticalMatches.length + horizontalMatches.length;            
+            this._player.collectGems(fromGem._type, count);            
+            
             this.removeGem(fromGem);
             view.removeIntentGemSwap(fromGem);
-            return 1 + verticalMatches.length + horizontalMatches.length;
+            
+            if (horizontalHasMagic || verticalHasMagic)
+            {
+                this._player.addMana(1);
+            }
+                        
+            return count;
         }
         
         return 0;

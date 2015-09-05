@@ -8,6 +8,11 @@
 ##### No coding IDE?
 Without a specialized Code Editor, it could be quite a challenge to program bigger games. While using Intel XDK that already supports Phaser or Pixi SJ is very convenient and fast to develop with, it is a challenge to get GC Devkit works with any popular HTML5 Code Editor. I am currently using Brackets to code, but only benefit from the syntax highlights and very basic coding aids. It would be nice to have an IDE fully working with GC Devkit.
 
+##### Multiple screen resolutions
+Solving multiple screen resolutions with GC is quite easy for simple problems, but can be a burden without more tools.
+
+Basic layout components should be available for this. 
+
 ##### Great Spriter!
 When working with sprites, I normally used applications like Texture Packer or in-house tools to generate sprite atlases. The workflow is good enough but Spriter is even better. I do not have to keep original images along-side with sprite sheet in project repositories anymore.
 
@@ -36,3 +41,5 @@ animate(this).now({image: '1.png'}).then({image: '2.png'}).then({image: '3.png')
 
 But I did not succeed, and I could not find something similar anywhere in the documentation of GC.
 
+##### ui.ScoreView should have tinting
+And outline and background color too.

@@ -58,7 +58,8 @@ exports = Class(ui.View, function(supr) {
     {
         var originalPosition = this.getOriginalPosition();                
                 
-        animate(this._gemSprite).clear().now({scale: 0, r: 0}, 0)
+        animate(this._gemSprite).clear().now({scale: 1, r: 0}, 0)
+            .then({scale: 1.2}, 200, animate.easeIn)
             .then({scale: 1}, 200, animate.easeOut);
     }
     
