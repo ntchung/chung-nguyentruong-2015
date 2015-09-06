@@ -13,6 +13,6 @@ exports.GEM_TYPE_COUNT = 7;
 exports.GRAVITY_FALL = 0;
 exports.FLIP_OUT = 1;
 
-exports.ENEMY_ADD_COINS_TIME = 1000;
+exports.ENEMY_ADD_COINS_TIME = 1500;
 exports.SPAWN_INTERVAL = 1000;
 exports.PLAYER_MAX_HP = 100.0;

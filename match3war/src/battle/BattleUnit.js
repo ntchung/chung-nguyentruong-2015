@@ -25,8 +25,8 @@ exports = Class(ui.View, function(supr) {
             superview: this,
             width: 128,
             height: 128,
-            offsetX: -48,
-            offsetY: -96,
+            offsetX: opts.sprOffsetX,
+            offsetY: opts.sprOffsetY,
             frameRate: 10,
             url: opts.url,
         });
@@ -69,8 +69,10 @@ exports = Class(ui.View, function(supr) {
             this._spriteView.startAnimation("dying", {
                 callback: function() {
                     self._isAnimationEnded = true;
+                    self._spriteView.stopAnimation();
                 },
-                delay: Infinity,
+                iterations: 1,
+                delay: 30000,
             });
             this._state = UnitState.Dying;
         }

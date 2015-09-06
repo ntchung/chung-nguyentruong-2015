@@ -46,8 +46,13 @@ exports = Class(ui.View, function(supr) {
         this._unitsList.length = 0;
         this._projectilesList.length = 0;
         
-        this._unitsPool['goblin'].releaseAllViews();
-        this._unitsPool['pikeman'].releaseAllViews();
+        for (var key in this._projectilesPool) {
+            this._projectilesPool[key].releaseAllViews();
+        }
+        
+        for (var key in this._unitsPool) {
+            this._unitsPool[key].releaseAllViews();
+        }
     };
     
     this.tick = function(dt)
@@ -117,7 +122,7 @@ exports = Class(ui.View, function(supr) {
             switch (desiredDice)
             {
                 case 1:
-                    desiredType = 'pikeman';                    
+                    desiredType = 'swordman';                    
                     break;
                 default:
                     desiredType = 'pikeman'
@@ -157,7 +162,7 @@ exports = Class(ui.View, function(supr) {
             switch (desiredDice)
             {
                 case 1:
-                    desiredType = 'goblin';                    
+                    desiredType = 'ogre';                    
                     break;
                 default:
                     desiredType = 'goblin'
@@ -268,6 +273,8 @@ exports = Class(ui.View, function(supr) {
             initOpts: {
                 superview: this, 
                 url: "resources/images/units/goblin",
+                sprOffsetX: -48,
+                sprOffsetY: -96,
                 maxHP: 8,
                 moveSpeed: 6,
                 attack: 4,
@@ -283,9 +290,29 @@ exports = Class(ui.View, function(supr) {
             initCount: 50,
             initOpts: {
                 superview: this, 
-                url: "resources/images/units/pikeman",
-                maxHP: 10,
+                url: "resources/images/units/ogre",
+                sprOffsetX: -48,
+                sprOffsetY: -96,
+                maxHP: 24,
                 moveSpeed: 4,
+                attack: 7,
+                attackRange: 40,
+                attackCooldown: 100,
+            }
+        }); 
+        this._unitsPool['ogre'] = pool;
+        this._unitsCost['ogre'] = 12;
+        
+        pool = new ViewPool({
+            ctor: BattleUnit,
+            initCount: 50,
+            initOpts: {
+                superview: this, 
+                url: "resources/images/units/pikeman",
+                sprOffsetX: -48,
+                sprOffsetY: -96,
+                maxHP: 10,
+                moveSpeed: 5,
                 attack: 4,
                 attackRange: 55,
                 attackCooldown: 100,
@@ -293,5 +320,23 @@ exports = Class(ui.View, function(supr) {
         }); 
         this._unitsPool['pikeman'] = pool;        
         this._unitsCost['pikeman'] = 7;
+        
+        pool = new ViewPool({
+            ctor: BattleUnit,
+            initCount: 50,
+            initOpts: {
+                superview: this, 
+                url: "resources/images/units/swordman",
+                sprOffsetX: -56,
+                sprOffsetY: -96,
+                maxHP: 30,
+                moveSpeed: 4,
+                attack: 8,
+                attackRange: 50,
+                attackCooldown: 110,
+            }
+        }); 
+        this._unitsPool['swordman'] = pool;        
+        this._unitsCost['swordman'] = 15;
     }
 });

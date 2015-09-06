@@ -14,6 +14,14 @@ exports = Class(ui.View, function(supr) {
         supr(this, 'init', [opts]);                        
         var view = this;
         
+        var gview = new GestureView({
+			superview: this,
+			layout: 'box',
+		});   
+        
+        gview.on('DragSingle', bind(this, 'drag'));
+        gview.on('Swipe', bind(this, 'swipe'));        
+        
         this._worldMapScale = screenHeight / 512.0;             
         this._worldMapScrollToX = 0;
         
@@ -23,19 +31,10 @@ exports = Class(ui.View, function(supr) {
             y: 0,
             autoSize: true,
             scale: this._worldMapScale,
-            image: "resources/images/worldmaps/worldmap.png"
+            image: "resources/images/worldmaps/worldmap.png",
+            canHandleEvents: false
         });        
             
-        var gview = new GestureView({
-			superview: this._worldMap,
-			layout: 'box',
-			backgroundColor: 'blue',
-            opacity: 0.0,
-		});   
-        
-        gview.on('DragSingle', bind(this, 'drag'));
-        gview.on('Swipe', bind(this, 'swipe'));
-        
         // Show buttons
         this.createMapButton(25, 185, {rows: 5, cols: 5, enemyAddCoinsRate: 1});
         this.createMapButton(150, 360, {rows: 6, cols: 6, enemyAddCoinsRate: 2});
@@ -79,12 +78,16 @@ exports = Class(ui.View, function(supr) {
         return button;
     }
     
+    this.tick = function(dt)
+    {
+        this._worldMap.style.x += (this._worldMapScrollToX - this._worldMap.style.x) * Math.min(dt * 0.008, 1.0);
+    }
+    
     this.drag = function(dx, dy) 
     {
         var maxX = this._worldMap.style.width * this._worldMapScale - GLOBAL.viewWidth;
-        var targetX = Math.max(Math.min(this._worldMapScrollToX + dx * 16, 0), -maxX);        
+        var targetX = Math.max(Math.min(this._worldMapScrollToX + dx * 4, 0), -maxX);        
         this._worldMapScrollToX = targetX;
-        animate(this._worldMap).now({x: targetX}, 200, animate.linear);
 	};
     
     this.swipe = function (angle, dir, numberOfFingers) 
@@ -102,6 +105,5 @@ exports = Class(ui.View, function(supr) {
         }
         
         this._worldMapScrollToX = targetX;
-        animate(this._worldMap).clear().now({x: targetX}, 200, animate.easeOut);
 	};
 });

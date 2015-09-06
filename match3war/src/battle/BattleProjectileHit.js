@@ -63,6 +63,7 @@ exports = Class(BattleProjectile, function(supr) {
                 this._spriteView.startAnimation("go", {
                     callback: function() {
                         self._isAnimationEnded = true;
+                        self._spriteView.stopAnimation();
                     }
                 });
                 
