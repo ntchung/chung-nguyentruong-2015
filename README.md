@@ -4,6 +4,9 @@ The game was developed using Game Closure devkit. The main project is inside mat
 
 The game will run normally on simulator like other GC devkit project.
 
+### Android
+At the root of this repo, you can find match3war-release.apk, which can be installed and run on supported Android devices.
+
 ### Features
 1. The usual yet-another-gem swap game with a taste of war.
 2. The goal of the game is to crush enemy's base by recruiting soldiers that will march toward the enemy's line.
@@ -66,6 +69,7 @@ And outline and background color too.
 Using SpriteView is very convenient, and its performance on browser is amazingly fast too.
 
 However, SpriteView is still missing some flexibility, and here are my suggestions:
+
 1. After playing a non-loop animation, it automatically goes back to the default. There should be some options to prevent this.
 2. The callback option of startAnimation should have the paramater frame Index instead of just being called at final frame. Emitting frame messages can solve this, but it might be slower then callback.
 3. Each animation frame should have the option to delay longer than others. If SpriteView has the option to specify which frame is which image, this is absolutely achievable.
@@ -73,6 +77,7 @@ However, SpriteView is still missing some flexibility, and here are my suggestio
 
 ##### Building on Android
 I failed instantly when trying for the first time. And after these steps, I finally got it working:
+
 1. Install Android NDK, set the PATH to ndk-build in /etc/environment
 2. Also set the path to Android SDK.
 3. Install Android platform-19 SDK.
