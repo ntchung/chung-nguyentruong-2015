@@ -13,6 +13,9 @@ exports = Class(function() {
         this._coins = 0;
         this._mana = 0;
         this._hp = 0;
+        this._positionX = 0;
+        this._marchDirection = 0;
+        this._marchDestination = 0;        
     }
     
     this.reset = function()
@@ -23,12 +26,12 @@ exports = Class(function() {
         }
         this._coins = 0;
         this._mana = 0;
-        this._hp = 1000;
+        this._hp = constants.PLAYER_MAX_HP;
     }
     
     this.getHPPercent = function()
     {
-        return this._hp / 1000.0;
+        return this._hp / constants.PLAYER_MAX_HP;
     }
     
     this.collectGems = function(type, count)

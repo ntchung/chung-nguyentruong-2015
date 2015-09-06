@@ -35,7 +35,7 @@ exports = Class(GC.Application, function () {
       
       //rootView.push(titleScreen);      
       rootView.push(gameScreen);    
-      gameScreen.emit('app:newgame', {rows: 10, cols: 10});
+      gameScreen.emit('app:newgame', {rows: 10, cols: 10, enemyAddCoinsRate: 5});
       
       titleScreen.on('titlescreen:start', function () {                  
           rootView.push(levelSelectScreen);

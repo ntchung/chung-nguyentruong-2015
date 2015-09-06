@@ -251,6 +251,8 @@ exports = Class(ui.View, function(supr) {
                 .now({width: this._model._human.getHPPercent() * 100}, 300, animate.linear);
             
             this._enemyHPBar.style.width = this._model._enemy.getHPPercent() * 100;
+            
+            this.emit('gemsboard:updatemodel');
         });
     };    
     

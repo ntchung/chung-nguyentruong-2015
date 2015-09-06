@@ -37,13 +37,13 @@ exports = Class(ui.View, function(supr) {
         gview.on('Swipe', bind(this, 'swipe'));
         
         // Show buttons
-        this.createMapButton(25, 185, {rows: 5, cols: 5});
-        this.createMapButton(150, 360, {rows: 6, cols: 6});
-        this.createMapButton(280, 225, {rows: 7, cols: 7});
-        this.createMapButton(420, 440, {rows: 8, cols: 8});
-        this.createMapButton(460, 240, {rows: 9, cols: 9});
-        this.createMapButton(690, 270, {rows: 10, cols: 10});
-        this.createMapButton(920, 195, {rows: 11, cols: 11});
+        this.createMapButton(25, 185, {rows: 5, cols: 5, enemyAddCoinsRate: 1});
+        this.createMapButton(150, 360, {rows: 6, cols: 6, enemyAddCoinsRate: 2});
+        this.createMapButton(280, 225, {rows: 7, cols: 7, enemyAddCoinsRate: 3});
+        this.createMapButton(420, 440, {rows: 8, cols: 8, enemyAddCoinsRate: 4});
+        this.createMapButton(460, 240, {rows: 9, cols: 9, enemyAddCoinsRate: 5});
+        this.createMapButton(690, 270, {rows: 10, cols: 10, enemyAddCoinsRate: 6});
+        this.createMapButton(920, 195, {rows: 11, cols: 11, enemyAddCoinsRate: 7});
     };      
     
     this.createMapButton = function(x, y, opts)

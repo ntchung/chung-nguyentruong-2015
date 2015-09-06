@@ -1,5 +1,5 @@
 exports.LEAST_MATCHES_REQUIRED = 3;
-exports.REQUIRED_MATCHES_FOR_MAGIC = 3;
+exports.REQUIRED_MATCHES_FOR_MAGIC = 5;
 
 exports.BOARD_WIDTH = 455;
 exports.BOARD_HEIGHT = 455;
@@ -12,3 +12,7 @@ exports.GEM_TYPE_COUNT = 7;
 
 exports.GRAVITY_FALL = 0;
 exports.FLIP_OUT = 1;
+
+exports.ENEMY_ADD_COINS_TIME = 1000;
+exports.SPAWN_INTERVAL = 1000;
+exports.PLAYER_MAX_HP = 100.0;

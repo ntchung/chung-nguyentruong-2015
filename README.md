@@ -43,3 +43,12 @@ But I did not succeed, and I could not find something similar anywhere in the do
 
 ##### ui.ScoreView should have tinting
 And outline and background color too.
+
+##### SpriteView
+Using SpriteView is very convenient, and its performance on browser is amazingly fast too.
+
+However, SpriteView is still missing some flexibility, and here are my suggestions:
+1. After playing a non-loop animation, it automatically goes back to the default. There should be some options to prevent this.
+2. The callback option of startAnimation should have the paramater frame Index instead of just being called at final frame. Emitting frame messages can solve this, but it might be slower then callback.
+3. Each animation frame should have the option to delay longer than others. If SpriteView has the option to specify which frame is which image, this is absolutely achievable.
+4. I could not find a way to alter the sheet url for a SpriteView obtained from a ViewPool. A method for this task should be available.
