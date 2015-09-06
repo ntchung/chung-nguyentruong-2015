@@ -85,11 +85,12 @@ I failed instantly when trying for the first time. And after these steps, I fina
 5. I installed Node JS modules: bluebird, chalk
 6. I installed node by: apt-get install node
 7. I made the missing symlink inside Tealeaf/jni: ln -s ../../native-core core
+8. I remove checkSymlinks in Makefile of native-android module, so that I can run "make setup" there.
 
 Still I could not build on Android...
 
-8. So, I decided to go through the tutorial nicely, taking Whack-a-mole as reference, I setup the manifest.json file correctly.
-9. At this point, I managed to get through most errors, but still something wrong with build.js.
-10. I removed the command that bugs build.js, which is actually generating the important strings.xml file.
-11. By ignoring the strings.xml construction, ant could not build the generated Android project.
-12. I made up the strings.xml manually, and finally I got the apk file working on my Sony phone!
+9. So, I decided to go through the tutorial nicely, taking Whack-a-mole as reference, I setup the manifest.json file correctly.
+10. At this point, I managed to get through most errors, but still something wrong with build.js.
+11. I removed the command that bugs build.js, which is actually generating the important strings.xml file.
+12. By ignoring the strings.xml construction, ant could not build the generated Android project.
+13. I made up the strings.xml manually, and finally I got the apk file working on my Sony phone
