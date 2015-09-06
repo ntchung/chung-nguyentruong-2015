@@ -1,7 +1,24 @@
 # Match 3 War
-### Running the game
+### Setup the game project
+The game was developed using Game Closure devkit. The main project is inside match3war folder. Simply "cd" to the match3war folder and type "devkit install" as usual.
 
-### My game design
+The game will run normally on simulator like other GC devkit project.
+
+### Features
+1. The usual yet-another-gem swap game with a taste of war.
+2. The goal of the game is to crush enemy's base by recruiting soldiers that will march toward the enemy's line.
+3. Player matches as many gems as possible to earn coins and mana.
+3. With coins, soldiers are automatically recruited to attack enemies.
+4. Mana is currently not usuable yet.
+5. Similar to Popcap's Bejeweled, gem swapping is fluid and seamless (almost no pause between player's actions).
+6. The game engine provides hints to player.
+7. If no moves available, all gems will be exploded.
+8. The magic gem can match any other colors.
+
+### Notes on artworks
+Most artworks are already provided by Weeby, but as my game needs more, I had to Google them. The artwork of soldiers are from Heroes of Might & Magic 2, which is not legal, but for a private test project, I hope for your tolerance.
+
+All other artworks are licensed to be free for sharing.
 
 ### Programmer reflection
 
