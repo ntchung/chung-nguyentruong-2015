@@ -12,6 +12,7 @@ exports = Class(ui.View, function(supr) {
     { 
         supr(this, 'init', [opts]);  
         
+        this._isActive = false;
         this._model = opts.model;
         this._parent = opts.superview;
         
@@ -37,10 +38,15 @@ exports = Class(ui.View, function(supr) {
         this._isActive = true;  
     };
     
+    this.cleanUp = function()
+    {
+        this._isActive = false;
+    };
+    
     this.tick = function(dt)
     {
         if (!this._isActive)
-        {2
+        {
             return;
         }
         
@@ -51,11 +57,13 @@ exports = Class(ui.View, function(supr) {
     {
         if (this._model._human._hp <= 0)
         {
+            this._parent.cleanUp();
             this._parent.emit('gamescreen:result', false);
             this._isActive = false;
         }
         else if (this._model._enemy._hp <= 0)
         {
+            this._parent.cleanUp();
             this._parent.emit('gamescreen:result', true);
             this._isActive = false;
         }

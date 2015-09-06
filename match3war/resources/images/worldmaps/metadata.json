@@ -2,7 +2,7 @@
     "rules": [
         {   
             "cond-target": "browser-mobile",
-            "cond-fileList": ["."],
+            "cond-fileList": ["worldmap.png"],
             "po2": true
         }
     ]

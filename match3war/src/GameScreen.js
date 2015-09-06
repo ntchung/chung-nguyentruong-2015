@@ -75,7 +75,7 @@ exports = Class(ui.View, function(supr) {
             },
             on: {
                 up: function() {
-                    view.clearGemsBoard();
+                    view.cleanUp();
                     view.emit('gamescreen:mainmenu');                    
                 }
             }
@@ -266,9 +266,10 @@ exports = Class(ui.View, function(supr) {
         this.emit('battlefield:updatemodel');
     }
     
-    this.clearGemsBoard = function()
+    this.cleanUp = function()
     {
         this._gemsBoard.cleanUp();        
+        this._battleField.cleanUp();
     }
 });
 

@@ -25,6 +25,7 @@ exports = Class(ui.View, function(supr) {
         
         this._parent = opts.superview;
         this._player = opts.player;
+        this._isActive = false;
                 
         // Gems        
         this._gemsPool = new ViewPool({
@@ -114,6 +115,7 @@ exports = Class(ui.View, function(supr) {
         
         this._selectedGem = null;
         this._touchBeginPoint = null;
+        this._isActive = true;
         
         this._interractionLock = 500;
         this._intentSwapFromGem = null;
@@ -126,8 +128,9 @@ exports = Class(ui.View, function(supr) {
     
     this.cleanUp = function()
     {
+        this._isActive = false;
         this._gemsPool.releaseAllViews();
-    }
+    };
     
     this.unselectCurrentGem = function() {
         if (this._selectedGem)
@@ -136,7 +139,7 @@ exports = Class(ui.View, function(supr) {
         }
         this._selectedGem = null;
         this._touchBeginPoint = null;
-    }
+    };
     
     this.swapGems = function(fromGem, toGem)
     {
@@ -271,6 +274,11 @@ exports = Class(ui.View, function(supr) {
     
     this.tick = function(dt)
     {
+        if (!this._isActive)
+        {
+            return;
+        }
+        
         if (this._interractionLock > 0)
         {
             this._interractionLock -= dt;

@@ -15,6 +15,7 @@ exports = Class(ui.View, function(supr) {
         var view = this;
         
         this._worldMapScale = screenHeight / 512.0;             
+        this._worldMapScrollToX = 0;
         
         this._worldMap = new ImageView({
             superview: this,
@@ -78,32 +79,29 @@ exports = Class(ui.View, function(supr) {
         return button;
     }
     
-    this.render = function(ctx)
-    {        
-    };
-    
     this.drag = function(dx, dy) 
     {
         var maxX = this._worldMap.style.width * this._worldMapScale - GLOBAL.viewWidth;
-        var targetX = Math.max(Math.min(this._worldMap.style.x + dx * 8, 0), -maxX);
-        
-        animate(this._worldMap).clear().now({x: targetX}, 100, animate.linear);
+        var targetX = Math.max(Math.min(this._worldMapScrollToX + dx * 16, 0), -maxX);        
+        this._worldMapScrollToX = targetX;
+        animate(this._worldMap).now({x: targetX}, 200, animate.linear);
 	};
     
     this.swipe = function (angle, dir, numberOfFingers) 
     {
         var maxX = this._worldMap.style.width * this._worldMapScale - GLOBAL.viewWidth;        
-        var targetX = this._worldMap.style.x;
+        var targetX = this._worldMapScrollToX;
         
 		if (dir == 'left')
         {
-            targetX = Math.max(Math.min(this._worldMap.style.x - 384, 0), -maxX);                    
+            targetX = Math.max(Math.min(targetX - 256, 0), -maxX);                    
         }
         else if (dir == 'right')
         {
-            targetX = Math.max(Math.min(this._worldMap.style.x + 384, 0), -maxX);                    
+            targetX = Math.max(Math.min(targetX + 256, 0), -maxX);                    
         }
         
+        this._worldMapScrollToX = targetX;
         animate(this._worldMap).clear().now({x: targetX}, 200, animate.easeOut);
 	};
 });
