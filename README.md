@@ -14,6 +14,7 @@ The game will run normally on simulator like other GC devkit project.
 6. The game engine provides hints to player.
 7. If no moves available, all gems will be exploded.
 8. The magic gem can match any other colors.
+9. Each level has different gems board size and difficulty. Enjoy!
 
 ### Notes on artworks
 Most artworks are already provided by Weeby, but as my game needs more, I had to Google them. The artwork of soldiers are from Heroes of Might & Magic 2, which is not legal, but for a private test project, I hope for your tolerance.
@@ -69,3 +70,21 @@ However, SpriteView is still missing some flexibility, and here are my suggestio
 2. The callback option of startAnimation should have the paramater frame Index instead of just being called at final frame. Emitting frame messages can solve this, but it might be slower then callback.
 3. Each animation frame should have the option to delay longer than others. If SpriteView has the option to specify which frame is which image, this is absolutely achievable.
 4. I could not find a way to alter the sheet url for a SpriteView obtained from a ViewPool. A method for this task should be available.
+
+##### Building on Android
+I failed instantly when trying for the first time. And after these steps, I finally got it working:
+1. Install Android NDK, set the PATH to ndk-build in /etc/environment
+2. Also set the path to Android SDK.
+3. Install Android platform-19 SDK.
+4. Run preinstall.sh script in Android plugin in modules/devkit-core/modules/native-android
+5. I installed Node JS modules: bluebird, chalk
+6. I installed node by: apt-get install node
+7. I made the missing symlink inside Tealeaf/jni: ln -s ../../native-core core
+
+Still I could not build on Android...
+
+8. So, I decided to go through the tutorial nicely, taking Whack-a-mole as reference, I setup the manifest.json file correctly.
+9. At this point, I managed to get through most errors, but still something wrong with build.js.
+10. I removed the command that bugs build.js, which is actually generating the important strings.xml file.
+11. By ignoring the strings.xml construction, ant could not build the generated Android project.
+12. I made up the strings.xml manually, and finally I got the apk file working on my Sony phone!

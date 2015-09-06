@@ -12,5 +12,21 @@
   "supportedOrientations": [
     "portrait"
   ],
-  "title": "War gems"
+  "title": "Gems of War",
+  "android": {
+    "icons": {
+      "144": "resources/icons/icon_512.png"
+    },
+    "versionCode": 1
+  },
+  "icon": "resources/icons/icon_512.png",
+  "studio": {
+    "domain": "ntchung.com",
+    "name": "NTChung",
+    "stagingDomain": "staging.ntchung.com"
+  },
+  "splash": {
+    "autoHide": true,
+    "universal": "resources/splash/splash.png"
+  }
 }
