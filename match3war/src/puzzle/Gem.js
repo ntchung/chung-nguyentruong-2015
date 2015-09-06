@@ -15,21 +15,24 @@ exports = Class(ui.View, function(supr) {
         
         this._gemSprite = new ui.ImageView({  
             superview: this,
-            anchorX: GLOBAL.gemWidth * 0.5,
-            anchorY: GLOBAL.gemHeight * 0.5,
-            width: GLOBAL.gemWidth,
-            height: GLOBAL.gemHeight,
         });                                  
     };  
     
     this.onObtain = function(opts)
     {        
-        animate(this).clear();
+        animate(this).clear();        
         
         this._type = opts.type;
         this._colorCode = this.getColorCode();
         this._row = opts.row;
-        this._col = opts.col;    
+        this._col = opts.col; 
+                
+        this._gemSprite.style.update({
+            anchorX: GLOBAL.gemWidth * 0.5,
+            anchorY: GLOBAL.gemHeight * 0.5,
+            width: GLOBAL.gemWidth,
+            height: GLOBAL.gemHeight,
+        });
         
         this._gemSprite.setImage(this.getImageUrl());        
         this.style.visible = true;
@@ -141,12 +144,7 @@ exports = Class(ui.View, function(supr) {
     {
         return this._colorCode == 0xFFFF;
     }
-    
-    // Empty
-    this.render = function(ctx)
-    {
-        // This is only a placeholder, the real sprites are children of this.
-    }
+
 });
 
 function animateGemSelection()

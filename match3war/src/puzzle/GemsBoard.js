@@ -17,12 +17,13 @@ exports = Class(ui.View, function(supr) {
     this.init = function(opts)
     { 
         opts = merge(opts, {            
-            width: 455,
-            height: 455,                        
+            width: constants.BOARD_WIDTH,
+            height: constants.BOARD_HEIGHT,                        
         });        
                 
         supr(this, 'init', [opts]);  
         
+        this._parent = opts.superview;
         this._player = opts.player;
                 
         // Gems        
@@ -92,18 +93,18 @@ exports = Class(ui.View, function(supr) {
         });
     };     
     
-    this.newGame = function(rows, cols)
+    this.newGame = function(opts)
     {
-        GLOBAL.gemWidth = constants.BOARD_WIDTH / rows;
-        GLOBAL.gemHeight = constants.BOARD_HEIGHT / cols;        
+        GLOBAL.gemWidth = constants.BOARD_WIDTH / opts.rows;
+        GLOBAL.gemHeight = constants.BOARD_HEIGHT / opts.cols;        
         
-        this._rows = rows;
-        this._cols = cols;
-        this._gems = new Array(rows);                
-        for (var row = 0; row < rows; ++row)
+        this._rows = opts.rows;
+        this._cols = opts.cols;
+        this._gems = new Array(this._rows);                
+        for (var row = 0; row < this._rows; ++row)
         {
-            this._gems[row] = new Array(cols);
-            for (var col = 0; col < cols; ++col)
+            this._gems[row] = new Array(this._cols);
+            for (var col = 0; col < this._cols; ++col)
             {
                 this.fallGemTo(row, col);
             }
@@ -136,10 +137,6 @@ exports = Class(ui.View, function(supr) {
         this._selectedGem = null;
         this._touchBeginPoint = null;
     }
-    
-    // Override the render and let the board has empty background
-    this.render = function(ctx) {
-    };   
     
     this.swapGems = function(fromGem, toGem)
     {
@@ -503,7 +500,9 @@ exports = Class(ui.View, function(supr) {
         if (checkCount > 0)
         {
             this.resetPotentialChecks();
-            this._state = BoardState.Collapse;             
+            this._state = BoardState.Collapse;     
+            
+            this._parent.emit('gemsboard:updatemodel');
         }
         else
         {                    

@@ -67,19 +67,20 @@ exports = Class(ui.ImageScaleView, function(supr) {
         // Show buttons
         var startButton = new ButtonView({
             superview: this,
-            x: 120,
-            y: (screenHeight - 120),
-            width: 240,
+            x: 20,
+            y: (screenHeight / 3),
+            width: 220,
             height: 80,
             images: {
                 up: "resources/images/ui/green_button00.png",
                 down: "resources/images/ui/green_button01.png"
             },
             text: {
-					color: "#FFFFFF",
-					size: 30,
-					autoFontSize: true,
-					autoSize: false,
+                color: "#FFFFFF",
+                size: 30,
+                autoFontSize: true,
+                autoSize: false,
+                shadowColor: "#111111",
             },
             title: "Start game",
             on: {

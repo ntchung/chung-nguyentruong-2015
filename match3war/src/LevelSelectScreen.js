@@ -1,48 +1,109 @@
 import ui.View;
-import ui.ImageScaleView;
+import ui.ImageView as ImageView;
+import ui.GestureView as GestureView;
 import ui.widget.ButtonView as ButtonView;
+import animate;
 
-exports = Class(ui.ImageScaleView, function(supr) {
+exports = Class(ui.View, function(supr) {
     
     this.init = function(opts)
     {
         var screenWidth = GLOBAL.viewWidth;
-        var screenHeight = GLOBAL.viewHeight;
+        var screenHeight = GLOBAL.viewHeight;        
         
-        opts = merge(opts, {
-            scaleMethod: 'cover',
-            x: 0,
-            y: 0,
-            image: "resources/images/title_screen.jpg"
-        });
-        
-        supr(this, 'init', [opts]);                
-        
+        supr(this, 'init', [opts]);                        
         var view = this;
         
-        // Show buttons
-        var startButton = new ButtonView({
+        this._worldMapScale = screenHeight / 512.0;             
+        
+        this._worldMap = new ImageView({
             superview: this,
-            x: 120,
-            y: (screenHeight - 120),
-            width: 240,
-            height: 80,
+            x: 0,
+            y: 0,
+            autoSize: true,
+            scale: this._worldMapScale,
+            image: "resources/images/worldmaps/worldmap.png"
+        });        
+            
+        var gview = new GestureView({
+			superview: this._worldMap,
+			layout: 'box',
+			backgroundColor: 'blue',
+            opacity: 0.0,
+		});   
+        
+        gview.on('DragSingle', bind(this, 'drag'));
+        gview.on('Swipe', bind(this, 'swipe'));
+        
+        // Show buttons
+        this.createMapButton(25, 185, {rows: 5, cols: 5});
+        this.createMapButton(150, 360, {rows: 6, cols: 6});
+        this.createMapButton(280, 225, {rows: 7, cols: 7});
+        this.createMapButton(420, 440, {rows: 8, cols: 8});
+        this.createMapButton(460, 240, {rows: 9, cols: 9});
+        this.createMapButton(690, 270, {rows: 10, cols: 10});
+        this.createMapButton(920, 195, {rows: 11, cols: 11});
+    };      
+    
+    this.createMapButton = function(x, y, opts)
+    {
+        var view = this;
+        var button = new ButtonView({
+            superview: this._worldMap,
+            x: x,
+            y: y,
+            anchorX: 30,
+            anchorY: 30,
+            width: 60,
+            height: 60,
             images: {
-                up: "resources/images/ui/green_button00.png",
-                down: "resources/images/ui/green_button01.png"
+                up: "resources/images/ui/button_round_purple.png",
+                down: "resources/images/ui/button_round_purplepressed.png"
             },
             text: {
-					color: "#FFFFFF",
-					size: 30,
-					autoFontSize: true,
-					autoSize: false,
+                color: "#FFFFFF",
+                size: 18,
+                autoFontSize: true,
+                autoSize: false,
+                shadowColor: "#111111",
             },
-            title: "Start game",
+            title: "Go!",
             on: {
                 up: function() {
-                    view.emit('levelselectscreen:go');
+                    view.emit('levelselectscreen:go', opts);
                 }
             }
-        });        
-    };      
+        });  
+        
+        return button;
+    }
+    
+    this.render = function(ctx)
+    {        
+    };
+    
+    this.drag = function(dx, dy) 
+    {
+        var maxX = this._worldMap.style.width * this._worldMapScale - GLOBAL.viewWidth;
+        var targetX = Math.max(Math.min(this._worldMap.style.x + dx * 8, 0), -maxX);
+        
+        animate(this._worldMap).clear().now({x: targetX}, 100, animate.linear);
+	};
+    
+    this.swipe = function (angle, dir, numberOfFingers) 
+    {
+        var maxX = this._worldMap.style.width * this._worldMapScale - GLOBAL.viewWidth;        
+        var targetX = this._worldMap.style.x;
+        
+		if (dir == 'left')
+        {
+            targetX = Math.max(Math.min(this._worldMap.style.x - 384, 0), -maxX);                    
+        }
+        else if (dir == 'right')
+        {
+            targetX = Math.max(Math.min(this._worldMap.style.x + 384, 0), -maxX);                    
+        }
+        
+        animate(this._worldMap).clear().now({x: targetX}, 200, animate.easeOut);
+	};
 });
