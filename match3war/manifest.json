@@ -1,32 +1,27 @@
 {
-  "appID": "6209985f18d94cbf87b2e66b56181e0e",
-  "dependencies": {
-    "devkit-core": "https://github.com/gameclosure/devkit-core#v3.0.2"
-  },
-  "shortName": "match3war",
-  "studio": {
-    "domain": "studio.example.com",
-    "name": "Your Studio Name",
-    "stagingDomain": "staging.example.com"
-  },
-  "supportedOrientations": [
-    "portrait"
-  ],
-  "title": "Gems of War",
   "android": {
     "icons": {
       "144": "resources/icons/icon_512.png"
     },
     "versionCode": 1
   },
+  "appID": "6209985f18d94cbf87b2e66b56181e0e",
+  "dependencies": {
+    "devkit-core": "https://github.com/gameclosure/devkit-core#v3.0.2"
+  },
   "icon": "resources/icons/icon_512.png",
+  "shortName": "match3war",
+  "splash": {
+    "autoHide": true,
+    "universal": "resources/splash/splash.png"
+  },
   "studio": {
     "domain": "ntchung.com",
     "name": "NTChung",
     "stagingDomain": "staging.ntchung.com"
   },
-  "splash": {
-    "autoHide": true,
-    "universal": "resources/splash/splash.png"
-  }
+  "supportedOrientations": [
+    "portrait"
+  ],
+  "title": "Gems of War"
 }

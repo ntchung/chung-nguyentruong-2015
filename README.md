@@ -93,4 +93,6 @@ Still I could not build on Android...
 10. At this point, I managed to get through most errors, but still something wrong with build.js.
 11. I removed the command that bugs build.js, which is actually generating the important strings.xml file.
 12. By ignoring the strings.xml construction, ant could not build the generated Android project.
-13. I made up the strings.xml manually, and finally I got the apk file working on my Sony phone
+13. I made up the strings.xml manually, and finally I got the apk file working on my Sony phone!
+
+Is it the real way? Absolutely not! I decided to remove the modules folder and "devkit install" again. This time, I only work out the Tealeaf symlink. No more error! Perhaps, I actually messed up some where.
